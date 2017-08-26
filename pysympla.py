@@ -1,29 +1,45 @@
 import requests
-from decouple import config
 from bs4 import BeautifulSoup
 
+class Sympla:
+    BASE_URL = 'https://www.sympla.com.br'
+    URLS = {
+        'LOGIN': BASE_URL + '/access/login',
+        'PARTICIPANTS': BASE_URL + '/participantes-evento',
+    }
 
-BASE_URL = 'https://www.sympla.com.br'
-LOGIN_URL = BASE_URL + '/access/login'
-PARTICIPANTS_URL = BASE_URL + '/participantes-evento'
-SYMPLA_USERNAME = config('SYMPLA_USERNAME')
-SYMPLA_PASSWORD = config('SYMPLA_PASSWORD')
+    def __init__(self, username, password):
+        self._authenticate(username, password)
 
-data = {
-    'username': SYMPLA_USERNAME,
-    'password': SYMPLA_PASSWORD,
-    'rememberMe': True,
-}
-HEADERS = {
-    'X-Requested-With': 'XMLHttpRequest',
-}
+    def _authenticate(self, username, password):
+        data = {
+            'username': username,
+            'password': password,
+            'rememberMe': True,
+        }
+        headers = {'X-Requested-With': 'XMLHttpRequest',}
+        response = requests.post(self.URLS['LOGIN'], data=data, headers=headers)
+        if response.status_code == 200:
+            self.cookies = response.cookies
+        else:
+            raise Exception('Authentication failed. Check your credentials.')
 
-logged = requests.post(LOGIN_URL, data=data, headers=HEADERS)
+    def get_event(self, id):
+        params = {'id': id}
+        response = requests.get(PARTICIPANTS_URL, params=params,
+                                cookies=self.cookies)
+        if response.status_code == 200:
+            return Event(response.text)
+        else:
+            raise Exception('Get event failed. Check event id.')
 
-CHIMARUNPOA_ID = 168054
-chimapoa = requests.get(PARTICIPANTS_URL, params={'id': CHIMARUNPOA_ID}, cookies=logged.cookies)
+class Event:
+    def __init__(self, html):
+        self.html = html
+        self.soup = BeautifulSoup(self.html, 'html5lib')
 
-soup = BeautifulSoup(chimapoa.text, 'html5lib')
-confirmed_participants = soup.find(id='spanTotalParticipants').get_text()
-pending_participants = soup.find(id='spanTotalPendingParticipants').get_text()
-confirmed_participants, pending_participants
+    def get_confirmed_participants(self):
+        return soup.find(id='spanTotalParticipants').get_text()
+
+    def get_pending_participants(self):
+        return soup.find(id='spanTotalPendingParticipants').get_text()
