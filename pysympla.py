@@ -26,7 +26,7 @@ class Sympla:
 
     def get_event(self, id):
         params = {'id': id}
-        response = requests.get(PARTICIPANTS_URL, params=params,
+        response = requests.get(self.URLS['PARTICIPANTS'], params=params,
                                 cookies=self.cookies)
         if response.status_code == 200:
             return Event(response.text)
@@ -35,11 +35,20 @@ class Sympla:
 
 class Event:
     def __init__(self, html):
-        self.html = html
-        self.soup = BeautifulSoup(self.html, 'html5lib')
+        self.soup = BeautifulSoup(html, 'html5lib')
+        self._confirmed_participants = 0
+        self._pending_participants = 0
 
-    def get_confirmed_participants(self):
-        return soup.find(id='spanTotalParticipants').get_text()
+    @property
+    def confirmed_participants(self):
+        if not self._confirmed_participants:
+            id = 'spanTotalParticipants'
+            self._confirmed_participants = self.soup.find(id=id).get_text()
+        return self._confirmed_participants
 
-    def get_pending_participants(self):
-        return soup.find(id='spanTotalPendingParticipants').get_text()
+    @property
+    def pending_participants(self):
+        if not self._pending_participants:
+            id = 'spanTotalPendingParticipants'
+            self._pending_participants = self.soup.find(id=id).get_text()
+        return self._pending_participants
