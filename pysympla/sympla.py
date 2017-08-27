@@ -26,7 +26,7 @@ class Sympla:
         headers = {'X-Requested-With': 'XMLHttpRequest',}
         response = requests.post(self.URLS['LOGIN'], data=data, headers=headers)
         if response.status_code == 200:
-            self.cookies = response.cookies
+            self._cookies = response._cookies
         else:
             raise Exception('Authentication failed. Check your credentials.')
 
@@ -39,14 +39,14 @@ class Sympla:
     def _get_event_html(self, id):
         params = { 'id': id }
         response = requests.get(self.URLS['PARTICIPANTS'], params=params,
-                                cookies=self.cookies)
+                                cookies=self._cookies)
         if response.status_code == 200:
             return response.text
         else:
             raise Exception('Get event failed. Check event id.')
 
     def get_events(self):
-        response = requests.get(self.URLS['EVENTS'], cookies=self.cookies)
+        response = requests.get(self.URLS['EVENTS'], cookies=self._cookies)
 
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'html5lib')
