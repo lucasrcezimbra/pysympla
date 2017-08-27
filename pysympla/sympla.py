@@ -26,7 +26,7 @@ class Sympla:
         headers = {'X-Requested-With': 'XMLHttpRequest',}
         response = requests.post(self.URLS['LOGIN'], data=data, headers=headers)
         if response.status_code == 200:
-            self._cookies = response._cookies
+            self._cookies = response.cookies
         else:
             raise Exception('Authentication failed. Check your credentials.')
 
