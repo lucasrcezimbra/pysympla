@@ -1,5 +1,8 @@
 pysympla
 ============
+.. image:: https://pyup.io/repos/github/Lrcezimbra/pysympla/shield.svg
+     :target: https://pyup.io/repos/github/Lrcezimbra/pysympla/
+     :alt: Updates
 
 
 Instalação
