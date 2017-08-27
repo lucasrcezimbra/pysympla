@@ -10,7 +10,7 @@ REQUIREMENTS = os.path.join(os.path.dirname(__file__), 'requirements.txt')
 if __name__ == "__main__":
     setup(name='pysympla',
           description='Scraper para acessar informações dos seus eventos no Sympla.',
-          version='0.0.1',
+          version='0.0.2',
           long_description=open(README).read(),
           author="Lucas Rangel Cezimbra",
           author_email="lucas.cezimbra@gmail.com",
