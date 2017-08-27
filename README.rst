@@ -4,7 +4,7 @@ pysympla
 
 Instalação
 ~~~~~~~~~~~~~
-`pip install pysympla`
+``pip install pysympla``
 
 Como Usar
 ~~~~~~~~~~~~~
