@@ -11,14 +11,14 @@ class Event:
     def confirmed_participants(self):
         if not self._confirmed_participants:
             id = 'spanTotalParticipants'
-            self._confirmed_participants = self._soup.find(id=id).get_text()
+            self._confirmed_participants = int(self._soup.find(id=id).get_text())
         return self._confirmed_participants
 
     @property
     def pending_participants(self):
         if not self._pending_participants:
             id = 'spanTotalPendingParticipants'
-            self._pending_participants = self._soup.find(id=id).get_text()
+            self._pending_participants = int(self._soup.find(id=id).get_text())
         return self._pending_participants
 
     @property
