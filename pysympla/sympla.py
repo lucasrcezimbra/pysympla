@@ -23,7 +23,7 @@ class Sympla:
             'password': password,
             'rememberMe': True,
         }
-        headers = {'X-Requested-With': 'XMLHttpRequest',}
+        headers = {'X-Requested-With': 'XMLHttpRequest'}
         response = requests.post(self.URLS['LOGIN'], data=data, headers=headers)
         if response.status_code == 200:
             self._cookies = response.cookies
@@ -33,11 +33,11 @@ class Sympla:
     def get_event(self, id):
         try:
             return Event(self._get_event_html(id))
-        except:
+        except Exception:
             raise Exception('Get event failed. Check event id.')
 
     def _get_event_html(self, id):
-        params = { 'id': id }
+        params = {'id': id}
         response = requests.get(self.URLS['PARTICIPANTS'], params=params,
                                 cookies=self._cookies)
         if response.status_code == 200:
